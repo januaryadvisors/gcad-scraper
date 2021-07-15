@@ -144,11 +144,11 @@ scrape_safe <- function(id) {
 #START SCRAPER -------------
 driver <- rsDriver(browser=c("firefox"))
 rd <- driver[["client"]]
-#rd$open()
+rd$open()
 rd$setTimeout(type = "implicit", milliseconds = 8000)
 
-start <- 1001
-end <- 3000
+start <- 13001
+end <- 15000
 results <- slice(df, start:end) %>% 
   group_by(id) %>% 
   do(scrape_safe(.$id))
