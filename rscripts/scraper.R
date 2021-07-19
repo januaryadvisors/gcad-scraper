@@ -141,19 +141,24 @@ scrape_safe <- function(id) {
   }
 }
 
+#Fix missings
+scraped <- readRDS(here::here("gcad_clean_data.rds"))
+missed <- filter(df, !(id %in% unique(scraped$id))) %>% filter(!is.na(id))
+df <- missed
+
 #START SCRAPER -------------
 driver <- rsDriver(browser=c("firefox"))
 rd <- driver[["client"]]
-rd$open()
+#rd$open()
 rd$setTimeout(type = "implicit", milliseconds = 8000)
 
-start <- 13001
-end <- 15000
+start <- 1
+end <- 1829
 results <- slice(df, start:end) %>% 
   group_by(id) %>% 
   do(scrape_safe(.$id))
 
-saveRDS(results, here::here("results", paste0("results_", start, "_", end, ".rds")))
+saveRDS(results, here::here("results", paste0("missed_results_", start, "_", end, ".rds")))
 
 #Shut down server #######################
 rd$close()
